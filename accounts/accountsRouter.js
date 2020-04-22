@@ -30,6 +30,23 @@ router.get("/:id", async (req, res, next) => {
     }
 })
 
+/////////////// POST ///////////////
+
+router.post("/", async (req, res, next) => {
+    try {
+        const payload = {
+            name: req.body.name,
+            budget: req.body.budget
+        }
+        // SQL Command: INSERT INTO "messages" ("title", "contents") VALUES (?, ?)
+        const [id] = await db("accounts").insert(payload)
+        const newAccount = await db("accounts").where("id", id).first()
+        res.json(newAccount)
+    } catch (err) {
+        next(err)
+    }
+})
+
 
 
 module.exports = router
