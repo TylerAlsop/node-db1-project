@@ -10,11 +10,26 @@ const router = express.Router()
 
 router.get("/", async (req, res, next) => {
 	try {
+        // SQL Command: SELECT * FROM "accounts"
         const accounts = await db.select("*").from("accounts")
 		res.json(accounts)
 	} catch (err) {
 		next(err)
 	}
 })
+
+// GET accounts by ID //
+
+router.get("/:id", async (req, res, next) => {
+    try {
+        // SQL Command: SELECT * FROM "accounts" WHERE "id" = ':id'
+        const accountById = await db("accounts").from("accounts").where("id", req.params.id)
+        res.json(accountById)
+    } catch (err) {
+        next(err)
+    }
+})
+
+
 
 module.exports = router
