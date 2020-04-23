@@ -38,10 +38,28 @@ router.post("/", async (req, res, next) => {
             name: req.body.name,
             budget: req.body.budget
         }
-        // SQL Command: INSERT INTO "messages" ("title", "contents") VALUES (?, ?)
+        // SQL Command: INSERT INTO "accounts" ("name", "budget") VALUES (?, ?)
         const [id] = await db("accounts").insert(payload)
-        const newAccount = await db("accounts").where("id", id).first()
+        const newAccount = await db("accounts").where("id", id)
         res.json(newAccount)
+    } catch (err) {
+        next(err)
+    }
+})
+
+/////////////// PUT ///////////////
+
+router.put("/:id", async (req, res, next) => {
+    try {
+        const payload = {
+            name: req.body.name,
+            budget: req.body.budget
+        }
+        // SQL Command: UPDATE "accounts" SET "name" = '?' AND "budget" = '?' WHERE "id" = '?'
+        await db("accounts").where("id", req.params.id).update(payload)
+        const updatedAccount = await db("accounts").where("id", req.params.id)
+        res.json(updatedAccount)
+
     } catch (err) {
         next(err)
     }
